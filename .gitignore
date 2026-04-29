@@ -1,0 +1,5 @@
+memory/
+.claude/
+*.log
+.DS_Store
+Thumbs.db
