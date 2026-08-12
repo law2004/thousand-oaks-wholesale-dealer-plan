@@ -277,6 +277,20 @@
     }
     .prefill-layout { grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr); align-items: start; }
     .profile-panel, .summary-panel { padding: 20px; }
+    .address-stage {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 24px;
+      border: 1px solid #fdba74;
+      border-radius: 12px;
+      padding: 16px;
+      background: var(--warning-bg);
+    }
+    .address-stage .section-kicker { margin-bottom: 4px; }
+    .address-stage h3 { margin-bottom: 4px; font-size: 18px; }
+    .address-stage p:last-child { margin-bottom: 0; color: var(--muted); font-size: 14px; }
     fieldset { margin: 0 0 24px; padding: 0; border: 0; }
     fieldset:last-of-type { margin-bottom: 0; }
     legend { margin-bottom: 12px; font-size: 18px; font-weight: 650; }
@@ -311,6 +325,7 @@
     .status[data-state="error"] { color: var(--danger); }
     .status[data-state="success"] { color: var(--success); }
     .status[data-state="working"] { color: var(--navy); }
+    .status[data-state="warning"] { color: var(--warning); }
     .privacy-note { margin: 20px 0 0; color: var(--muted); font-size: 14px; }
 
     .source-list { margin: 0; padding-left: 20px; }
@@ -320,7 +335,7 @@
     footer.site-footer p { margin-bottom: 8px; }
 
     @media (max-width: 860px) {
-      .today-grid, .decision-grid, .message-grid, .prefill-layout { grid-template-columns: 1fr; }
+      .today-grid, .decision-grid, .message-grid, .prefill-layout, .address-stage { grid-template-columns: 1fr; }
     }
     @media (max-width: 680px) {
       .hero { padding: 64px 0 48px; }
@@ -370,56 +385,64 @@
 
       <div class="callout gate">
         <h3>Your only hard stop today</h3>
-        <p>Confirm the address and proposed use in writing. If the residence is inside Thousand Oaks city limits, ask Planning and Business Licensing about the Business Tax Certificate and Home Occupation Permit. Ask DMV Occupational Licensing how it will evaluate the specific home office for a wholesale only application. Do not assume a garage, sign, customer visit, vehicle storage, or a generic online checklist is acceptable.</p>
+        <p>Confirm the address and proposed use in writing with the jurisdiction that actually governs the parcel, then ask DMV Occupational Licensing how it will evaluate the specific home office. Do not assume a garage, sign, customer visit, vehicle storage, or a generic online checklist is acceptable.</p>
+      </div>
+
+      <div class="callout danger" style="margin-top: 16px">
+        <h3>1030 Calle Rey is screened, not cleared.</h3>
+        <p><strong>Use this address format:</strong> 1030 Calle Rey, Thousand Oaks, CA 91360. The supplied ZIP 91630 is not correct for this address. The parcel is APN <strong>663-0-021-125</strong> and is outside Thousand Oaks city limits in unincorporated Ventura County, in the residential RO-20,000 sq ft zone.</p>
+        <p>That means the Thousand Oaks City home-business packet is not the right clearance path. Before using this location on a DMV application, obtain a <strong>Ventura County Home Occupation Zoning Clearance</strong> and County Business Tax Certificate for the exact, truthful operating plan. A residential zone does not automatically approve a vehicle-dealer office.</p>
+        <p class="button-row"><a class="button warn" href="#prefill">Load this address into the local prefill</a><a class="button secondary" href="https://rma.venturacounty.gov/divisions/planning/home-occupation-business/" target="_blank" rel="noreferrer">Open County approval instructions</a></p>
       </div>
 
       <div class="today-grid" style="margin-top: 16px">
         <article class="today-card">
           <div class="step">1</div>
           <h3>Identify the jurisdiction</h3>
-          <p>Write down the exact physical office address, then confirm whether it is:</p>
+          <p>For this address, the answer is already known:</p>
           <ul>
-            <li>inside Thousand Oaks city limits</li>
             <li>unincorporated Ventura County</li>
-            <li>another city or LA County jurisdiction</li>
+            <li>not inside Thousand Oaks city limits</li>
+            <li>County, not City, controls the home-occupation decision</li>
           </ul>
         </article>
         <article class="today-card">
           <div class="step">2</div>
-          <h3>Send two short requests</h3>
-          <p>Use the scripts below. Attach a simple floor plan or room photo if requested. Ask for the response and any conditions in writing.</p>
+          <h3>Ask the County first</h3>
+          <p>Use the County message below. The answer must be written and must cover the actual operation, not a generic "home office" description.</p>
         </article>
         <article class="today-card">
           <div class="step">3</div>
-          <h3>Make a decision sheet</h3>
-          <p>Before any form is started, decide the exact entity name, any DBA, owners, and expected first year vehicle volume. Those details must match across the City, DMV, seller permit, and bond.</p>
+          <h3>Then use the County packet</h3>
+          <p>If Planning says the operation qualifies, submit the County Home Occupation packet and Business Tax Certificate together. Save the stamped or emailed clearance before moving to DMV.</p>
         </article>
       </div>
 
       <div class="message-grid" aria-label="Copyable request messages">
         <article class="message-card">
-          <header><h3>Message for Planning and Business Licensing</h3></header>
-          <blockquote id="city-message">I plan to apply for a California wholesale only used vehicle dealer license at [full address]. The residence would contain only a dedicated administrative and records office. There would be no retail sales, public display lot, onsite inventory, reconditioning, commercial vehicle storage, exterior sign, or customer traffic beyond any permitted limit. Is this use allowed at this address? What written property use or Home Occupation approval and conditions will DMV need?</blockquote>
-          <footer><button class="button secondary" type="button" data-copy="city-message">Copy city message</button></footer>
+          <header><h3>Message for Ventura County Planning</h3></header>
+          <blockquote id="county-message">Please provide a written zoning determination for a proposed wholesale-only motor vehicle dealer office at 1030 Calle Rey, Thousand Oaks, CA 91360 (APN 663-0-021-125). The proposed operation would be limited to records and dealer-to-dealer administrative work. No retail sales, public showroom, vehicle display, inventory storage, repair, reconditioning, signage, address advertising, non-household employees, or customer/dealer visits would occur at the residence. Please confirm whether this qualifies for a Home Occupation Zoning Clearance under County Code section 8107-1.2 and whether the County will issue/stamp the Business Tax Certificate. If not, please identify the required permit or appropriate zoning.</blockquote>
+          <footer><button class="button secondary" type="button" data-copy="county-message">Copy County message</button></footer>
         </article>
         <article class="message-card">
           <header><h3>Message for DMV Occupational Licensing</h3></header>
-          <blockquote id="dmv-message">I plan to apply for a California wholesale only used vehicle dealer license from a dedicated residential office at [full address]. Please confirm the current process for the dealer education exam, online application, office and photo requirements, and inspection scheduling. Does this proposed home office layout meet the current requirements for a wholesale only dealer?</blockquote>
+          <blockquote id="dmv-message">I plan to apply for a California wholesale only used vehicle dealer license from a dedicated residential office at 1030 Calle Rey, Thousand Oaks, CA 91360. I am obtaining Ventura County written Home Occupation Zoning Clearance first. Please confirm the current process for the dealer education exam, online application, office and photo requirements, and inspection scheduling. Does this proposed home office layout meet the current requirements for a wholesale only dealer?</blockquote>
           <footer><button class="button secondary" type="button" data-copy="dmv-message">Copy DMV message</button></footer>
         </article>
       </div>
+      <p class="fine-print">Only send the County message if every operational statement is true. Do not describe the address as approved until Ventura County issues the written zoning clearance and DMV accepts the office at inspection.</p>
     </section>
 
     <section id="llc" class="section" aria-labelledby="llc-heading">
       <div class="section-heading">
         <p class="section-kicker">LLC setup</p>
-        <h2 id="llc-heading">Form the LLC with California, then connect it to Thousand Oaks and DMV.</h2>
-        <p>There is no separate “Thousand Oaks LLC.” California creates the LLC. Thousand Oaks then approves the local business address and DMV separately licenses the wholesale dealer business.</p>
+        <h2 id="llc-heading">Form the LLC with California, then connect it to the local jurisdiction and DMV.</h2>
+        <p>There is no separate "Thousand Oaks LLC." California creates the LLC. The local jurisdiction then approves the business address and DMV separately licenses the wholesale dealer business.</p>
       </div>
 
       <div class="callout gate">
         <h3>Keep the order straight</h3>
-        <p>Clear the exact address first. Then form the LLC with the California Secretary of State. Do not use a generated PDF for this step: the State currently lists both LLC formation and the initial Statement of Information as online only through bizfile. The local City packet does not create an LLC, and an LLC does not authorize vehicle dealing.</p>
+        <p>Clear the exact address first. Then form the LLC with the California Secretary of State. Do not use a generated PDF for this step: the State currently lists both LLC formation and the initial Statement of Information as online only through bizfile. A local approval packet does not create an LLC, and an LLC does not authorize vehicle dealing.</p>
       </div>
 
       <div class="path" style="margin-top: 24px">
@@ -471,9 +494,9 @@
         <article class="phase-card">
           <div class="phase-number">5</div>
           <div class="phase-body">
-            <h3>Hand the same LLC details to the City, bank, and DMV</h3>
+            <h3>Hand the same LLC details to the local authority, bank, and DMV</h3>
             <p class="phase-status">No spelling variations</p>
-            <p>Use the exact State legal name and entity number for the business bank account, CDTFA seller permit, Thousand Oaks local approval route that matches the office, bond, and DMV applications. Keep the accepted formation record and Statement of Information in your DMV attachment folder.</p>
+            <p>Use the exact State legal name and entity number for the business bank account, CDTFA seller permit, local approval route that matches the office, bond, and DMV applications. For 1030 Calle Rey, that local route is Ventura County rather than the City of Thousand Oaks. Keep the accepted formation record and Statement of Information in your DMV attachment folder.</p>
           </div>
         </article>
       </div>
@@ -511,9 +534,9 @@
           <div class="phase-body">
             <h3>Complete tax and local approvals</h3>
             <p class="phase-status">Collect proof, do not rely on verbal approval</p>
-            <p>Apply for the CDTFA seller permit and save the issued permit. If the office is inside Thousand Oaks, use the City home office or commercial office packet that matches the actual location. A home office needs the Home Occupation process. A commercial office can also need Certificate of Occupancy and zoning clearance. If the physical office is outside City limits, use the outside City packet only when Thousand Oaks tells you its Business Tax Certificate is required for the activity. The City portal is preferred and City review can require department clearance.</p>
+            <p>Apply for the CDTFA seller permit and save the issued permit. For 1030 Calle Rey, use Ventura County's Home Occupation Zoning Clearance packet and County Business Tax Certificate application together after Planning confirms that the truthful operation qualifies. The County says a successful submission is stamped or emailed as the zoning clearance. Do not use a Thousand Oaks City home packet for this address. For another location, use the jurisdiction that governs that physical office.</p>
             <ul class="detail-list">
-              <li>Keep a PDF or screenshot of the seller permit, local application, approval, and any conditions.</li>
+              <li>Keep a PDF or screenshot of the seller permit, County application, stamped clearance or emailed certificate, and every condition.</li>
               <li>Do not advertise vehicles, store business vehicles, or install a sign at the residence unless the local authority expressly allows it.</li>
               <li>Use the dedicated office to keep records available during the business hours you provide to DMV.</li>
             </ul>
@@ -684,6 +707,20 @@
           <div class="button-row"><a class="button" href="forms/10-dmv-8016-live-scan-service.pdf" download>Download PDF</a><a class="button secondary" href="https://qr.dmv.ca.gov/portal/file/request-for-live-scan-clearance-receipt-dmv-8016-pdf/" target="_blank" rel="noreferrer">Official source</a></div>
         </article>
         <article class="form-card">
+          <p class="form-type">1030 Calle Rey local clearance</p>
+          <h3>Ventura County Home Occupation Zoning Clearance</h3>
+          <p>Use for this unincorporated Ventura County residential address only after Planning confirms the actual wholesale-office operation can qualify. It includes operational certifications, property-owner details, and County approval fields. The safe draft tool preloads only the office address, APN, and business name.</p>
+          <p class="file-name"><code>forms/16-ventura-county-home-occupation-zoning-clearance-packet.pdf</code></p>
+          <div class="button-row"><a class="button" href="forms/16-ventura-county-home-occupation-zoning-clearance-packet.pdf" download>Download PDF</a><a class="button secondary" href="https://rmadocs.venturacounty.gov/planning/forms/planning-home-occupation-zoning-clearance-application-packet.pdf" target="_blank" rel="noreferrer">Official source</a></div>
+        </article>
+        <article class="form-card">
+          <p class="form-type">1030 Calle Rey local clearance</p>
+          <h3>Ventura County Business Tax Certificate</h3>
+          <p>Submit this with the County Home Occupation packet. The current source is a printable form, so it remains manual; do not put tax ID, Social Security number, signature, or tax calculations into this site.</p>
+          <p class="file-name"><code>forms/17-ventura-county-business-tax-certificate-application.pdf</code></p>
+          <div class="button-row"><a class="button" href="forms/17-ventura-county-business-tax-certificate-application.pdf" download>Download PDF</a><a class="button secondary" href="https://venturacounty.gov/ttc/bl-new/" target="_blank" rel="noreferrer">Official instructions</a></div>
+        </article>
+        <article class="form-card">
           <p class="form-type">Thousand Oaks home address only</p>
           <h3>City Home Business Tax and Home Occupation Packet</h3>
           <p>Use only when the physical office is a residence inside Thousand Oaks city limits. It includes private information and City approval fields. The safe draft tool only writes basic business contact fields.</p>
@@ -731,6 +768,14 @@
       <div class="prefill-shell">
         <div class="prefill-layout">
           <form id="profile-form" class="profile-panel" novalidate autocomplete="off">
+            <div class="address-stage" aria-labelledby="address-stage-heading">
+              <div>
+                <p class="section-kicker">Address stage</p>
+                <h3 id="address-stage-heading">1030 Calle Rey address-based prefill</h3>
+                <p>Loads 1030 Calle Rey, Thousand Oaks, CA 91360 and APN 663-0-021-125 for an unincorporated Ventura County home-office draft. It does not clear the address, certify the operation, or submit anything.</p>
+              </div>
+              <button class="button warn" type="button" id="load-address">Load address + APN</button>
+            </div>
             <fieldset>
               <legend>1. Application decisions</legend>
               <div class="field-grid">
@@ -740,9 +785,10 @@
                     <option value="">Choose one</option>
                     <option value="thousand-oaks-home">Inside Thousand Oaks city limits: home office</option>
                     <option value="thousand-oaks-commercial">Inside Thousand Oaks city limits: commercial office</option>
+                    <option value="ventura-county-home">Ventura County: home office</option>
                     <option value="outside-thousand-oaks">Outside Thousand Oaks city limits</option>
                   </select>
-                  <span>Use the actual office address, not a mailing address. Choose outside City limits for unincorporated Ventura County or another city.</span>
+                  <span>Use the actual office address, not a mailing address. Choose Ventura County for an unincorporated County home office such as 1030 Calle Rey.</span>
                 </label>
                 <label>
                   Expected first year volume
@@ -817,6 +863,11 @@
                   <input id="business-zip" name="business-zip" type="text" required inputmode="numeric" placeholder="91360">
                 </label>
                 <label>
+                  County parcel/APN, if applicable
+                  <input id="parcel-apn" name="parcel-apn" type="text" placeholder="663-0-021-125">
+                  <span>Required only for the Ventura County Home Occupation draft. Confirm it against the exact office address.</span>
+                </label>
+                <label>
                   Primary owner full name
                   <input id="owner-name" name="owner-name" type="text" required placeholder="Last, First, Middle">
                   <span>For additional owners, rerun the safe drafts with that owner's name where appropriate and complete their individual forms yourself.</span>
@@ -848,6 +899,7 @@
               <li><strong>OL 21A:</strong> firm, office, and used auto fields only. Select Wholesale, property, bank, and certification fields directly in the official PDF.</li>
               <li><strong>ADM 9050:</strong> principal identity and license type only. You still sign and notarize it.</li>
               <li><strong>OL 53:</strong> legal entity name only. Add bank details directly in the PDF.</li>
+              <li><strong>Ventura County Home Occupation:</strong> office address, APN, and business name only. Complete all operational, owner, and approval fields manually and truthfully.</li>
               <li><strong>Thousand Oaks home packet:</strong> basic business and contact fields only, for a home office inside City limits.</li>
               <li><strong>Thousand Oaks commercial packet:</strong> basic business and contact fields only, for a commercial office inside City limits.</li>
               <li><strong>Outside City limits packet:</strong> basic business and contact fields only, and only if Thousand Oaks tells you it is required.</li>
@@ -857,6 +909,7 @@
               <button class="button" type="button" data-generate="ol21a">Download prefilled OL 21A</button>
               <button class="button" type="button" data-generate="adm9050">Download prefilled ADM 9050</button>
               <button class="button" type="button" data-generate="ol53">Download prefilled OL 53</button>
+              <button class="button secondary" type="button" data-generate="county-home">Download Ventura County Home Occupation draft</button>
               <button class="button secondary" type="button" data-generate="city-home">Download Thousand Oaks home draft</button>
               <button class="button secondary" type="button" data-generate="city-commercial">Download Thousand Oaks commercial draft</button>
               <button class="button secondary" type="button" data-generate="city-outside">Download outside City limits draft</button>
@@ -881,6 +934,9 @@
         <li><a href="https://www.dmv.ca.gov/portal/vehicle-industry-services/occupational-licensing/occupational-licenses/vehicle-dealer-license/" target="_blank" rel="noreferrer">California DMV vehicle dealer license page</a>: current online application path, fees, inspection flow, and dealer resources.</li>
         <li><a href="https://www.dmv.ca.gov/portal/handbook/vehicle-industry-registration-procedures-manual-2/general-information-licensees/wholesale-dealer/" target="_blank" rel="noreferrer">California DMV wholesale dealer guidance</a>: wholesale sales are between licensed dealers and wholesale dealers do not need a display area or business sign.</li>
         <li><a href="https://www.dmv.ca.gov/portal/file/used-dealer-or-dealer-wholesale-only-application-checklist-ol-248b-pdf/" target="_blank" rel="noreferrer">OL 248B official checklist</a>: the authoritative packet order and attachments.</li>
+        <li><a href="https://rma.venturacounty.gov/divisions/planning/home-occupation-business/" target="_blank" rel="noreferrer">Ventura County Home Occupation process</a>: the County path for an unincorporated residential business, including the application, Business Tax Certificate, review, and stamped or emailed clearance sequence.</li>
+        <li><a href="https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=1030%20Calle%20Rey%2C%20Thousand%20Oaks%2C%20CA&amp;benchmark=Public_AR_Current&amp;format=json" target="_blank" rel="noreferrer">Federal address lookup for 1030 Calle Rey</a>: use the returned postal ZIP 91360, not 91630, in drafts and verify mailing details again before signing.</li>
+        <li><a href="https://maps.venturacounty.gov/arcgis/rest/services/SDs/Parcels/MapServer/0/query?where=APN%3D%27663002112%27&amp;outFields=APN%2CAPN10%2CSITUS%2CACREAGE&amp;returnGeometry=false&amp;f=pjson" target="_blank" rel="noreferrer">Ventura County parcel lookup for APN 663-0-021-125</a> and <a href="https://maps.venturacounty.gov/arcgis/rest/services/SDs/MyZoning/MapServer/0/query?where=1%3D1&amp;geometry=-13236120%2C4054940&amp;geometryType=esriGeometryPoint&amp;inSR=3857&amp;spatialRel=esriSpatialRelIntersects&amp;outFields=ZONE%2CBASE_ZONE%2CDEFINITION&amp;returnGeometry=false&amp;f=pjson" target="_blank" rel="noreferrer">County zoning lookup</a>: the address screening evidence for 1030 Calle Rey.</li>
         <li><a href="https://toaks.gov/businesslicenses" target="_blank" rel="noreferrer">City of Thousand Oaks business licenses</a>: the City portal, home business packet, and contact details.</li>
         <li><a href="https://cdtfa.ca.gov/services/registration.htm" target="_blank" rel="noreferrer">CDTFA registration services</a>: seller permit information and online registration.</li>
       </ul>

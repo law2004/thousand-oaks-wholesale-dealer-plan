@@ -39,9 +39,24 @@ Apply for an EIN only after the State accepts the LLC, using the free [IRS EIN s
 | `06-ol-25b-wholesale-only-bond-under-25-vehicles.pdf` | Wholesale only dealer selling fewer than 25 vehicles a year, if eligible | [OL 25B](https://www.dmv.ca.gov/portal/file/surety-bond-of-motorcycle-dealer-motorcycle-lessor-retailer-or-wholesale-only-dealer-less-than-25-vehicles-per-year-ol-25b-pdf/) |
 | `12-ol-25e-deposit-agreement-and-assignment.pdf` and `13-std-204-payee-data-record.pdf` | Deposit agreement alternative | [OL 25E](https://www.dmv.ca.gov/portal/file/deposit-agreement-and-assignment-ol-25e-pdf/) and [STD 204](https://www.documents.dgs.ca.gov/dgs/fmc/pdf/std204.pdf) |
 
-## Local Thousand Oaks approval
+## Local approval follows the physical office
 
-The local packet is based on the **physical office location**, not simply a Thousand Oaks mailing address. A City Business Tax Certificate is separate from California LLC formation and separate from DMV dealer licensing. Confirm the correct local route in writing before filing.
+The local packet is based on the **physical office location**, not simply a Thousand Oaks mailing address. A local Business Tax Certificate is separate from California LLC formation and separate from DMV dealer licensing. Confirm the correct local route in writing before filing.
+
+### 1030 Calle Rey address screen
+
+`1030 Calle Rey, Thousand Oaks, CA 91360` (APN `663-0-021-125`) is **outside the City of Thousand Oaks** in unincorporated Ventura County. The corrected ZIP is `91360`, not `91630`. The County's parcel and zoning services identify the parcel as residential `RO-20,000 sq ft` / Single-Family Estate. This is a location screen only, not permission to operate a dealer business.
+
+Before using this address on a DMV application, ask Ventura County Planning for a written determination based on the actual operation. If Planning confirms that the use qualifies as a home occupation, submit the County Home Occupation - Zoning Clearance packet and Business Tax Certificate application together. The County's published process says a successful review is stamped on the certificate or emailed as a PDF. Do not use the Thousand Oaks City home packet for this address.
+
+| Local file | When to use it | Official source |
+| --- | --- | --- |
+| `16-ventura-county-home-occupation-zoning-clearance-packet.pdf` | For an unincorporated Ventura County home office after Planning confirms eligibility; includes the operational standards, application, owner information, and County fields | [Ventura County Home Occupation packet](https://rmadocs.venturacounty.gov/planning/forms/planning-home-occupation-zoning-clearance-application-packet.pdf) |
+| `17-ventura-county-business-tax-certificate-application.pdf` | Submit with the County Home Occupation packet; County tax and approval fields must be completed manually | [Ventura County Business Tax Certificate instructions](https://venturacounty.gov/ttc/bl-new/) |
+
+The County home-occupation route is only plausible for a business that is incidental to the residence and complies with every applicable condition. Do not declare the address, operational restrictions, owner details, tax IDs, signatures, or certifications through the browser prefill tool. The local tool only adds the office address, APN, and business name to the County packet.
+
+### Thousand Oaks City routes
 
 | Local file | When to use it | Official source |
 | --- | --- | --- |

@@ -46,12 +46,30 @@ async function verifyTextForm(relativePath, fieldName, value) {
   console.log(`OK ${path.basename(relativePath)} prefill value survives reopening`);
 }
 
+async function verifyCountyHome() {
+  const pdf = await load("forms/16-ventura-county-home-occupation-zoning-clearance-packet.pdf");
+  const form = pdf.getForm();
+  form.getTextField("Site Address").setText("1030 Calle Rey, Thousand Oaks, CA 91360");
+  form.getTextField("Text43").setText("663-0-021-125");
+  form.getTextField("Text45").setText("Test Wholesale LLC");
+  const result = (await saveAndReopen(pdf)).getForm();
+  if (
+    result.getTextField("Site Address").getText() !== "1030 Calle Rey, Thousand Oaks, CA 91360" ||
+    result.getTextField("Text43").getText() !== "663-0-021-125" ||
+    result.getTextField("Text45").getText() !== "Test Wholesale LLC"
+  ) {
+    throw new Error("Ventura County Home Occupation prefill values did not survive reopening.");
+  }
+  console.log("OK Ventura County Home Occupation prefill values survive reopening");
+}
+
 (async () => {
   await verifyOl21a();
   await verifyTextForm("forms/prefill/03-ol-12-original-occupational-license.pdf", "Name- Last, First, Mid-1", "Tester, Taylor M");
   await verifyTextForm("forms/prefill/07-ol-53-financial-information-release.pdf", "Licensee Name-Page 07A", "Test Wholesale LLC");
   await verifyTextForm("forms/prefill/09-adm-9050-agent-for-service-of-process.pdf", "principal names", "Test Wholesale LLC");
   await verifyTextForm("forms/prefill/11-thousand-oaks-home-business-tax-and-home-occupation-permit.pdf", "DBA", "Test Wholesale");
+  await verifyCountyHome();
 })().catch((error) => {
   console.error(error);
   process.exit(1);

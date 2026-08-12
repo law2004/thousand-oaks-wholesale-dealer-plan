@@ -6,6 +6,7 @@
     ol21a: "forms/prefill/04-ol-21a-original-occupational-license.pdf",
     ol53: "forms/prefill/07-ol-53-financial-information-release.pdf",
     adm9050: "forms/prefill/09-adm-9050-agent-for-service-of-process.pdf",
+    countyHome: "forms/16-ventura-county-home-occupation-zoning-clearance-packet.pdf",
     cityHome: "forms/prefill/11-thousand-oaks-home-business-tax-and-home-occupation-permit.pdf",
     cityCommercial: "forms/14-thousand-oaks-commercial-business-tax-packet.pdf",
     cityOutside: "forms/15-thousand-oaks-outside-city-business-tax-packet.pdf"
@@ -13,6 +14,7 @@
 
   const profileForm = document.querySelector("#profile-form");
   const statusNode = document.querySelector("#pdf-status");
+  const countyHomeDraftButton = document.querySelector('[data-generate="county-home"]');
   const cityHomeDraftButton = document.querySelector('[data-generate="city-home"]');
   const cityCommercialDraftButton = document.querySelector('[data-generate="city-commercial"]');
   const cityOutsideDraftButton = document.querySelector('[data-generate="city-outside"]');
@@ -78,6 +80,7 @@
       businessCity: getValue("business-city"),
       businessState: getValue("business-state").toUpperCase(),
       businessZip: getValue("business-zip"),
+      parcelApn: getValue("parcel-apn"),
       ownerName: getValue("owner-name"),
       ownerTitle: getValue("owner-title"),
       ownerEmail: getValue("owner-email")
@@ -176,6 +179,19 @@
     await saveDraft(pdfDocument, "draft-ol-53.pdf");
   }
 
+  async function makeCountyHome(profile) {
+    if (profile.jurisdiction !== "ventura-county-home") {
+      throw new Error("Choose Ventura County: home office under Physical office jurisdiction before creating this draft.");
+    }
+
+    const pdfDocument = await openPdf(FORM_PATHS.countyHome);
+    const form = pdfDocument.getForm();
+    safeSetText(form, "Site Address", officeAddress(profile));
+    safeSetText(form, "Text43", profile.parcelApn);
+    safeSetText(form, "Text45", normalFirmName(profile));
+    await saveDraft(pdfDocument, "draft-ventura-county-home-occupation-zoning-clearance.pdf");
+  }
+
   function addCityBusinessIdentity(form, profile) {
     const firmName = normalFirmName(profile);
 
@@ -244,6 +260,7 @@
     ol21a: makeOl21a,
     adm9050: makeAdm9050,
     ol53: makeOl53,
+    "county-home": makeCountyHome,
     "city-home": makeCityHome,
     "city-commercial": makeCityCommercial,
     "city-outside": makeCityOutside
@@ -266,6 +283,7 @@
       updateStatus(error.message || "Could not create the PDF draft. Download the blank official form and try again.", "error");
     } finally {
       buttons.forEach((button) => { button.disabled = false; });
+      updateLocationDraftAvailability();
     }
   }
 
@@ -273,8 +291,12 @@
     button.addEventListener("click", () => generateDraft(button.dataset.generate));
   });
 
-  document.querySelector("#clear-profile").addEventListener("click", () => {
-    window.setTimeout(() => updateStatus("Local profile cleared. Nothing was saved by this page."), 0);
+  profileForm.addEventListener("reset", () => {
+    window.setTimeout(() => {
+      updateLocationDraftAvailability();
+      updateBondRouteHint();
+      updateStatus("Local profile cleared. Nothing was saved by this page.");
+    }, 0);
   });
 
   document.querySelectorAll("[data-copy]").forEach((button) => {
@@ -291,8 +313,9 @@
     });
   });
 
-  function updateCityDraftAvailability() {
+  function updateLocationDraftAvailability() {
     const jurisdiction = document.querySelector("#jurisdiction").value;
+    countyHomeDraftButton.disabled = jurisdiction !== "ventura-county-home";
     cityHomeDraftButton.disabled = jurisdiction !== "thousand-oaks-home";
     cityCommercialDraftButton.disabled = jurisdiction !== "thousand-oaks-commercial";
     cityOutsideDraftButton.disabled = jurisdiction !== "outside-thousand-oaks";
@@ -312,8 +335,19 @@
     }
   }
 
-  document.querySelector("#jurisdiction").addEventListener("change", updateCityDraftAvailability);
+  document.querySelector("#load-address").addEventListener("click", () => {
+    document.querySelector("#jurisdiction").value = "ventura-county-home";
+    document.querySelector("#business-address").value = "1030 Calle Rey";
+    document.querySelector("#business-city").value = "Thousand Oaks";
+    document.querySelector("#business-state").value = "CA";
+    document.querySelector("#business-zip").value = "91360";
+    document.querySelector("#parcel-apn").value = "663-0-021-125";
+    updateLocationDraftAvailability();
+    updateStatus("Address and APN loaded. This is not Ventura County or DMV clearance; get the written County determination before using the location for a dealer application.", "warning");
+  });
+
+  document.querySelector("#jurisdiction").addEventListener("change", updateLocationDraftAvailability);
   document.querySelector("#annual-volume").addEventListener("change", updateBondRouteHint);
-  updateCityDraftAvailability();
+  updateLocationDraftAvailability();
   updateBondRouteHint();
 })();
