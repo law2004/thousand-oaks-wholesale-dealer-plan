@@ -6,12 +6,16 @@
     ol21a: "forms/prefill/04-ol-21a-original-occupational-license.pdf",
     ol53: "forms/prefill/07-ol-53-financial-information-release.pdf",
     adm9050: "forms/prefill/09-adm-9050-agent-for-service-of-process.pdf",
-    city: "forms/prefill/11-thousand-oaks-home-business-tax-and-home-occupation-permit.pdf"
+    cityHome: "forms/prefill/11-thousand-oaks-home-business-tax-and-home-occupation-permit.pdf",
+    cityCommercial: "forms/14-thousand-oaks-commercial-business-tax-packet.pdf",
+    cityOutside: "forms/15-thousand-oaks-outside-city-business-tax-packet.pdf"
   };
 
   const profileForm = document.querySelector("#profile-form");
   const statusNode = document.querySelector("#pdf-status");
-  const cityDraftButton = document.querySelector('[data-generate="city"]');
+  const cityHomeDraftButton = document.querySelector('[data-generate="city-home"]');
+  const cityCommercialDraftButton = document.querySelector('[data-generate="city-commercial"]');
+  const cityOutsideDraftButton = document.querySelector('[data-generate="city-outside"]');
 
   function getValue(id) {
     return document.querySelector(`#${id}`).value.trim();
@@ -172,15 +176,8 @@
     await saveDraft(pdfDocument, "draft-ol-53.pdf");
   }
 
-  async function makeCityPacket(profile) {
-    if (profile.jurisdiction !== "thousand-oaks") {
-      throw new Error("The Thousand Oaks draft is available only when the physical office is inside Thousand Oaks city limits.");
-    }
-
-    const pdfDocument = await openPdf(FORM_PATHS.city);
-    const form = pdfDocument.getForm();
+  function addCityBusinessIdentity(form, profile) {
     const firmName = normalFirmName(profile);
-    const mailingAddress = officeAddress(profile);
 
     safeSetText(form, "DBA", firmName);
     if (profile.entityType !== "sole") safeSetText(form, "Corp Name", profile.legalName);
@@ -196,17 +193,61 @@
     safeSetText(form, "Bus Email", profile.businessEmail);
     safeSetText(form, "Owner1", profile.ownerName);
     safeSetText(form, "Title1", profile.ownerTitle);
-    safeSetText(form, "Email Address", profile.ownerEmail);
-    safeSetText(form, "Name of Business", firmName);
-    safeSetText(form, "Business Address must be the residential location of the business", mailingAddress);
-    safeSetText(form, "Phone Number", profile.businessPhone);
-    safeSetText(form, "Mailing Address if different from Business Address", mailingAddress);
-    safeSetText(form, "Name of Applicant", profile.ownerName);
-
-    await saveDraft(pdfDocument, "draft-thousand-oaks-home-business-packet.pdf");
+    safeSetText(form, "Owner1 Phone", profile.businessPhone);
   }
 
-  const generators = { ol12: makeOl12, ol21a: makeOl21a, adm9050: makeAdm9050, ol53: makeOl53, city: makeCityPacket };
+  async function makeCityPacket(profile, expectedJurisdiction, path, filename, label) {
+    if (profile.jurisdiction !== expectedJurisdiction) {
+      throw new Error(`Choose ${label} under Physical office jurisdiction before creating this draft.`);
+    }
+
+    const pdfDocument = await openPdf(path);
+    const form = pdfDocument.getForm();
+    const firmName = normalFirmName(profile);
+    const mailingAddress = officeAddress(profile);
+
+    addCityBusinessIdentity(form, profile);
+    if (expectedJurisdiction === "thousand-oaks-home") {
+      safeSetText(form, "Email Address", profile.ownerEmail);
+      safeSetText(form, "Name of Business", firmName);
+      safeSetText(form, "Business Address must be the residential location of the business", mailingAddress);
+      safeSetText(form, "Phone Number", profile.businessPhone);
+      safeSetText(form, "Mailing Address if different from Business Address", mailingAddress);
+      safeSetText(form, "Name of Applicant", profile.ownerName);
+    }
+
+    if (expectedJurisdiction === "thousand-oaks-commercial") {
+      safeSetText(form, "Business Name", firmName);
+      safeSetText(form, "Business Address", mailingAddress);
+      safeSetText(form, "Business Owner", profile.ownerName);
+      safeSetText(form, "Business Phone No", profile.businessPhone);
+      safeSetText(form, "Email Address", profile.businessEmail);
+    }
+
+    await saveDraft(pdfDocument, filename);
+  }
+
+  function makeCityHome(profile) {
+    return makeCityPacket(profile, "thousand-oaks-home", FORM_PATHS.cityHome, "draft-thousand-oaks-home-business-packet.pdf", "Inside Thousand Oaks city limits: home office");
+  }
+
+  function makeCityCommercial(profile) {
+    return makeCityPacket(profile, "thousand-oaks-commercial", FORM_PATHS.cityCommercial, "draft-thousand-oaks-commercial-business-packet.pdf", "Inside Thousand Oaks city limits: commercial office");
+  }
+
+  function makeCityOutside(profile) {
+    return makeCityPacket(profile, "outside-thousand-oaks", FORM_PATHS.cityOutside, "draft-thousand-oaks-outside-city-business-packet.pdf", "Outside Thousand Oaks city limits");
+  }
+
+  const generators = {
+    ol12: makeOl12,
+    ol21a: makeOl21a,
+    adm9050: makeAdm9050,
+    ol53: makeOl53,
+    "city-home": makeCityHome,
+    "city-commercial": makeCityCommercial,
+    "city-outside": makeCityOutside
+  };
 
   async function generateDraft(type) {
     const profile = getProfile();
@@ -251,7 +292,10 @@
   });
 
   function updateCityDraftAvailability() {
-    cityDraftButton.disabled = document.querySelector("#jurisdiction").value !== "thousand-oaks";
+    const jurisdiction = document.querySelector("#jurisdiction").value;
+    cityHomeDraftButton.disabled = jurisdiction !== "thousand-oaks-home";
+    cityCommercialDraftButton.disabled = jurisdiction !== "thousand-oaks-commercial";
+    cityOutsideDraftButton.disabled = jurisdiction !== "outside-thousand-oaks";
   }
 
   function updateBondRouteHint() {
